@@ -1,7 +1,7 @@
 const WebSocket = require('ws')
 const queryString = require('query-string')
 
-//Структура для хранения вебсокетов пользователей
+//Структура для хранения подключений пользователей
 const current_connections = new Map();
 
 async function websocket (expressServer) {
@@ -31,24 +31,46 @@ async function websocket (expressServer) {
             // console.log(connectionParams);
 
             //Добавляем данный вебсокет соединение с пользователем в список
-            if (user_id) {
-                console.log(`Новое websocket соединение установлено для пользователя с id: ${user_id}`)
-                current_connections.set(user_id, websocketConnection);
+            if (current_connections.get(user_id)) {
+                current_connections.get(user_id).push(websocketConnection)
             }
             else {
-                websocketConnection.send(JSON.stringify({message: 'Вы не авторизованы'}));
-                websocketConnection.close(1000,JSON.stringify({message: 'Соединение закрыто'}));
+                current_connections.set(user_id, [websocketConnection])
             }
 
-            //после подключения отправляем юзеру приветсвенное сообщение
-            websocketConnection.send(JSON.stringify({message: 'WebSocket соединение установлено'}));
+            // console.log(current_connections)
 
             //обработчик полученных сообщений, обратите внимание, что тело запроса приходит в json, поэтому его нужно предварительно распарсить
-            websocketConnection.on("message", (message) => {
+            websocketConnection.on("message", message => {
+                const server_timestamp = Date.now()
                 const parsedMessage = JSON.parse(message);
                 console.log(parsedMessage);
-                current_connections.get(parsedMessage.to_user)
-                .send(JSON.stringify({ message: parsedMessage.message }));
+                if (current_connections.get(parsedMessage.to)) {
+                    current_connections.get(parsedMessage.to).forEach(websocket => {
+                        websocket.send(JSON.stringify({
+                            message: parsedMessage.message,
+                            from_nickname: parsedMessage.from_nickname,
+                            to: parsedMessage.to,
+                            server_timestamp: server_timestamp
+                        }))                        
+                    });
+                }
+                else {
+                    // как-то созранить сообщение и отправить потом
+                }
+                if (current_connections.get(1 - parsedMessage.to)) {
+                    current_connections.get(1 - parsedMessage.to).forEach(websocket => {
+                        websocket.send(JSON.stringify({
+                            message: parsedMessage.message,
+                            from_nickname: parsedMessage.from_nickname,
+                            to: parsedMessage.to,
+                            server_timestamp: server_timestamp
+                        }))                        
+                    });
+                }
+                else {
+                    // как-то созранить сообщение и отправить потом
+                }
             });
         }
     );

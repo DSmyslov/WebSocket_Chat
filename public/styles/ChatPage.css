@@ -28,6 +28,8 @@ body {
 }
 
 #message-submit {
+    padding-top: 5px;
+    border-top: solid rgb(0, 0, 0) 2px;
     gap: 5px;
     display: flex;
     width: 100%;
@@ -35,5 +37,43 @@ body {
 }
 
 #messages-container {
-    width: 60%;
+    border: solid rgb(0, 34, 255);
+    border-radius: 10px;
+    padding: 10px;
+    width: 80%;
+}
+
+#status-bar {
+    padding-bottom: 5px;
+    border-bottom: solid rgb(0, 0, 0) 2px;
+}
+
+#messages {
+    padding: 5px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 5px;
+}
+
+.message {
+    /* border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 0; */
+    gap: 5px;
+    padding: 5px;
+    /* border-radius: 20px; */
+    border: solid mediumpurple;
+    max-width: 70%;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    /* margin-left: 2px; */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.message-info {
+    display: flex;
+    justify-content: space-between;
 }
