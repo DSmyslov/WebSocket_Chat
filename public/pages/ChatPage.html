@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="rus">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/ChatPage.css">
+    <title>WebSocket Chat</title>
+</head>
+
+<body>
+    <div class="my-container">
+        <div id="user-bar">
+            <div id="user-id">Ваш ID: </div>
+            <div id="username">
+                Никнейм:
+                <input type="text" id="input-nickname" placeholder="Введите никнейм">
+                <button id="accept-nickname">Принять</button>
+            </div>
+            <div id="interact-ws-server">
+                <button id="connect-ws-server">Подключиться</button>
+                <button id="disconnect-ws-server">Отключиться</button>
+            </div>
+        </div>
+        <div id="messages-container" class="">
+            <div id="status-bar">
+                <div id="current-nickname"></div>
+                <div id="current-connection-status">Соединение установлено</div>
+            </div>
+            <div id="messages">
+                messages
+            </div>
+            <div id="message-submit">
+                <input type="text" placeholder="Введите сообщение" id="input-message">
+                <button id="send-message">Отправить</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="../scripts/ChatPageScript.js"></script>
+
+</html>

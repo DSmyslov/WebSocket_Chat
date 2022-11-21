@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: 200;
+    color: rgb(0, 60, 240);
+}
+
+.prompt {
+    font-size: larger;
+    margin-bottom: 10px;
+}
+
+.user-picker-images {
+    display: flex;
+    gap: 10px;
+}
+
+.user-img {
+    width: 200px;
+    height: auto;
+}
