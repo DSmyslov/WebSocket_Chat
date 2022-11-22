@@ -30,7 +30,7 @@ async function websocket (expressServer) {
             /** получить параметры запроса бывает важно, например, когда вы хотите сделать запрос авторизованным */
             // console.log(connectionParams);
 
-            //Добавляем данный вебсокет соединение с пользователем в список
+            //Добавляем данное соединение с пользователем в список
             if (current_connections.get(user_id)) {
                 current_connections.get(user_id).push(websocketConnection)
             }
@@ -45,31 +45,30 @@ async function websocket (expressServer) {
                 const server_timestamp = Date.now()
                 const parsedMessage = JSON.parse(message);
                 console.log(parsedMessage);
+                let data_to_send =  {};
+                if (parsedMessage.type == 'changeMessageStatus') {
+                    data_to_send = parsedMessage;
+                }
+                else {
+                    parsedMessage.server_timestamp = server_timestamp;
+                    parsedMessage.status = 'Принято сервером';
+                    data_to_send = parsedMessage;
+                }
                 if (current_connections.get(parsedMessage.to)) {
                     current_connections.get(parsedMessage.to).forEach(websocket => {
-                        websocket.send(JSON.stringify({
-                            message: parsedMessage.message,
-                            from_nickname: parsedMessage.from_nickname,
-                            to: parsedMessage.to,
-                            server_timestamp: server_timestamp
-                        }))                        
+                        websocket.send(JSON.stringify(data_to_send));                        
                     });
                 }
                 else {
-                    // как-то созранить сообщение и отправить потом
+                    // как-то сохранить сообщение и отправить потом
                 }
                 if (current_connections.get(1 - parsedMessage.to)) {
                     current_connections.get(1 - parsedMessage.to).forEach(websocket => {
-                        websocket.send(JSON.stringify({
-                            message: parsedMessage.message,
-                            from_nickname: parsedMessage.from_nickname,
-                            to: parsedMessage.to,
-                            server_timestamp: server_timestamp
-                        }))                        
+                        websocket.send(JSON.stringify(data_to_send));                        
                     });
                 }
                 else {
-                    // как-то созранить сообщение и отправить потом
+                    // как-то сохранить сообщение и отправить потом
                 }
             });
         }
