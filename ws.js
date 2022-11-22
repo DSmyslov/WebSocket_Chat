@@ -42,9 +42,11 @@ async function websocket (expressServer) {
 
             //обработчик полученных сообщений, обратите внимание, что тело запроса приходит в json, поэтому его нужно предварительно распарсить
             websocketConnection.on("message", message => {
-                const server_timestamp = Date.now()
+                const server_timestamp = Date.now();
+                // необходимо как-то проиндексировать сообщение !!!
+                // console.log(message)
                 const parsedMessage = JSON.parse(message);
-                console.log(parsedMessage);
+                // console.log(parsedMessage);
                 if (current_connections.get(parsedMessage.to)) {
                     current_connections.get(parsedMessage.to).forEach(websocket => {
                         websocket.send(JSON.stringify({
@@ -64,7 +66,8 @@ async function websocket (expressServer) {
                             message: parsedMessage.message,
                             from_nickname: parsedMessage.from_nickname,
                             to: parsedMessage.to,
-                            server_timestamp: server_timestamp
+                            server_timestamp: server_timestamp,
+                            status: 'Получено сервером'
                         }))                        
                     });
                 }
