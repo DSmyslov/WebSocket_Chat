@@ -149,8 +149,26 @@ const ws_onmessage = event => {
 
     if (parsedMessage.type == 'changeMessageStatus') {
         let msg_to_change = document.getElementById(parsedMessage.server_timestamp);
-        msg_to_change.getElementsByClassName('status')[0].innerHTML = parsedMessage.status
+        msg_to_change.getElementsByClassName('status')[0].innerHTML = parsedMessage.status;
+        const data_to_send = {
+            type: 'MessageStatusChanged',
+            status: 'Отправитель получил уведомление о доставке',
+            this_msg_sender: 1 - parsedMessage.to,
+            server_timestamp: parsedMessage.server_timestamp
+        }
+        websocket.send(JSON.stringify(data_to_send));
         return;
+    }
+
+    else if (parsedMessage.type == 'message') {
+        // Сообщим серверу, что получили сообщение
+        const data_to_send = {
+            type: 'MessageReceived',
+            status: 'Получено отправителем',
+            this_msg_sender: user_id,
+            server_timestamp: parsedMessage.server_timestamp
+        }
+        websocket.send(JSON.stringify(data_to_send));
     }
 
     showMessage(parsedMessage);
